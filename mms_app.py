@@ -308,6 +308,6 @@ else:
 
 st.markdown("""
 <div class="footer-bar">
-    MMS · Northward IMF Event · Feb 27 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Amelia Köth · ERAU LSMIR
+    MMS · Northward IMF Event · Feb 27 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Amelia Köth · ERAU LASMIR
 </div>
 """, unsafe_allow_html=True)
