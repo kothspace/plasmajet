@@ -87,7 +87,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-MATLAB_DIR = os.path.expanduser("~/MATLAB")
+MATLAB_DIR = os.path.dirname(os.path.abspath(__file__))
 
 left_col, right_col = st.columns([3, 1.2])
 
