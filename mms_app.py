@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import os
+from PIL import Image
 
 st.set_page_config(
     page_title="MMS Plasma Jet Trajectory Viewer",
@@ -150,7 +151,7 @@ if run:
     xj, yj, zj = X[jet_idx], Y[jet_idx], Z[jet_idx]
     Bmin = B_mag.min()
     Bmax = B_mag.max()
-    B_mag_jet = np.sqrt(Bx[jet_idx]**2 + By[jet_idx]**2 + Bz[jet_idx]**2) 
+    B_mag_jet = np.sqrt(Bx[jet_idx]**2 + By[jet_idx]**2 + Bz[jet_idx]**2)
 
     # 5. ARROW SCALE
     ARROW_MIN   = 0.0008
@@ -160,7 +161,7 @@ if run:
     # 6. BUILD FIGURE
     fig = go.Figure()
 
-    # black trajectory line
+    # trajectory line
     fig.add_trace(go.Scatter3d(
         x=X, y=Y, z=Z,
         mode='lines',
@@ -169,7 +170,7 @@ if run:
         hovertemplate='X: %{x:.4f} RE<br>Y: %{y:.4f} RE<br>Z: %{z:.4f} RE<extra></extra>'
     ))
 
-    # black normal arrows
+    # normal arrows
     for i in range(N):
         if i == jet_idx:
             continue
@@ -183,7 +184,7 @@ if run:
             name='Magnetic Field',
             showlegend=(i == 0),
             hoverinfo='skip'
-            ))
+        ))
 
     # red jet core arrow
     nj = normals[jet_idx]
@@ -200,15 +201,14 @@ if run:
 
     # red jet core dot
     fig.add_trace(go.Scatter3d(
-      x=[xj], y=[yj], z=[zj],
+        x=[xj], y=[yj], z=[zj],
         mode='markers',
         marker=dict(size=4, color='red'),
         name='Jet Core Position',
         hovertemplate=f'Jet Core<br>X:{xj:.4f} Y:{yj:.4f} Z:{zj:.4f}<extra></extra>'
     ))
 
-
-    # 7. STYLE — no titlefont, use title dict instead
+    # 7. STYLE
     fig.update_layout(
         height=600,
         paper_bgcolor='white',
@@ -258,24 +258,56 @@ if run:
     # 8. SUMMARY
     summary_html = f"""
 <div class="summary-box">
-        <b style="color:#c0392b;">Time:</b> {timestamps[jet_idx]}<br>
+    <b style="color:#c0392b;">Time:</b> {timestamps[jet_idx]}<br>
     <hr style="border:1px dashed #b0cce8; margin:6px 0;">
-        <b style="color:#c0392b;">X:</b> {xj:.4f} RE<br>
-        <b style="color:#c0392b;">Y:</b> {yj:.4f} RE<br>
-        <b style="color:#c0392b;">Z:</b> {zj:.4f} RE<br>
+    <b style="color:#c0392b;">X:</b> {xj:.4f} RE<br>
+    <b style="color:#c0392b;">Y:</b> {yj:.4f} RE<br>
+    <b style="color:#c0392b;">Z:</b> {zj:.4f} RE<br>
     <hr style="border:1px dashed #b0cce8; margin:6px 0;">
-        <b style="color:#c0392b;">|B|:</b> {B_mag_jet:.4f} nT<br>
-        <b style="color:#c0392b;">Nx:</b> {normals[jet_idx,0]:.4f}<br>
-        <b style="color:#c0392b;">Ny:</b> {normals[jet_idx,1]:.4f}<br>
-        <b style="color:#c0392b;">Nz:</b> {normals[jet_idx,2]:.4f}<br>
+    <b style="color:#c0392b;">|B|:</b> {B_mag_jet:.4f} nT<br>
+    <b style="color:#c0392b;">Nx:</b> {normals[jet_idx,0]:.4f}<br>
+    <b style="color:#c0392b;">Ny:</b> {normals[jet_idx,1]:.4f}<br>
+    <b style="color:#c0392b;">Nz:</b> {normals[jet_idx,2]:.4f}<br>
     <hr style="border:1px dashed #b0cce8; margin:6px 0;">
-        <b style="color:#c0392b;">Index:</b> {jet_idx}
+    <b style="color:#c0392b;">Index:</b> {jet_idx}
 </div>
 """
     summary_placeholder.markdown(summary_html, unsafe_allow_html=True)
 
+# POSTER SECTION
+st.markdown("---")
+st.markdown('<div class="section-header">Research Poster</div>', unsafe_allow_html=True)
+st.markdown("""
+<div style="
+    background-color: white;
+    border: 1.5px solid #c8d8ea;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+">
+    <p style="
+        font-size: 13px;
+        color: #0a1a3a;
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-family: 'Times New Roman';
+    ">
+        String-of-Pearls Measurements of Supersonic Plasma Jets Using Magnetospheric MultiScale Satellites<br>
+        <span style="font-weight:normal; color:#555;">Amelia Köth, Dr. Yu-Lun Liou, and Dr. Katariina Nykyri</span><br>
+        <span style="font-weight:normal; color:#555;">Laboratory for Solar-Magnetosphere-Ionosphere Research · ERAU</span>
+    </p>
+</div>
+""", unsafe_allow_html=True)
+
+POSTER_PATH = os.path.join(MATLAB_DIR, "poster.png")
+if os.path.exists(POSTER_PATH):
+    poster_img = Image.open(POSTER_PATH)
+    st.image(poster_img, use_container_width=True)
+else:
+    st.warning("poster.png not found — upload it to your GitHub repository")
+
 st.markdown("""
 <div class="footer-bar">
-    MMS · Northward IMF Event · Feb 27 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Amelia Köth · ERAU LASMIR
+    MMS · Northward IMF Event · Feb 27 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Amelia Köth · ERAU LSMIR
 </div>
 """, unsafe_allow_html=True)
