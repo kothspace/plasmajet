@@ -367,6 +367,8 @@ st.markdown(f"""
 POSTER_PATH = os.path.join(MATLAB_DIR, "poster.png")
 # Download button for poster
 if os.path.exists(POSTER_PATH):
+    poster_img = Image.open(POSTER_PATH)
+    st.image(poster_img, use_container_width=True)
     with open(POSTER_PATH, "rb") as f:
         poster_bytes = f.read()
     st.download_button(
@@ -375,8 +377,6 @@ if os.path.exists(POSTER_PATH):
         file_name="MMS_Plasma_Jet_Poster.png",
         mime="image/png"
         )
-    poster_img = Image.open(POSTER_PATH)
-    st.image(poster_img, use_container_width=True)
 else:
     st.warning("poster.png not found — upload it to your GitHub repository")
 
