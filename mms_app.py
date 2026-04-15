@@ -5,39 +5,63 @@ import plotly.graph_objects as go
 import os
 from PIL import Image
 
+# ── Color palette ────────────────────────────────────────────────────────────
+C = {
+    "bg":         "#fafaf9",
+    "navy":       "#162e4b",
+    "navy2":      "#365579",
+    "navy3":      "#6088b6",
+    "cream":      "#faf7f2",
+    "blush":      "#f5dde4",
+    "pale_blue":  "#e8f3ff",
+    "white":      "#ffffff",
+    "text_light": "#a8bcd4",
+    "border":     "#c8d8ea",
+    "grid":       "#dde6f0",
+    "accent":     "#365579",
+    "hover_pink": "#fff1f9",
+    "elec_b":     "#097bff",
+    "dot":        "#ff6573",
+    "traj":       "#3163d4",
+}
+
 st.set_page_config(
-    page_title="MMS Plasma Jet Trajectory Viewer",
+    page_title="String-of-Pearls Measurements of Supersonic Plasma Jets",
     layout="wide",
     page_icon="🛰"
 )
 
-st.markdown("""
+st.markdown(f"""
 <style>
-    .main { background-color: #f4f6fa; }
-    .block-container { padding-top: 1rem; }
-    .header-box {
-        background-color: #0a1a3a;
-        color: white;
+    .main, .stApp, [data-testid="stAppViewContainer"] {{
+        background-color: {C["bg"]} !important;
+    }}
+    .block-container {{ padding-top: 1rem; }}
+
+    .header-box {{
+        background-color: {C["pale_blue"]};
+        color: {C["navy"]};
         padding: 16px 24px;
         border-radius: 8px;
         text-align: center;
         margin-bottom: 16px;
-    }
-    .header-box h1 { font-size: 26px; font-weight: bold; margin: 0; color: white; }
-    .header-box p  { font-size: 12px; color: #a8bcd4; margin: 4px 0 0 0; font-family: 'Times New Roman', monospace; }
-    .summary-box {
-        background-color: #eaf2fb;
-        border: 1.5px solid #b0cce8;
+    }}
+    .header-box h1 {{ font-size: 26px; font-weight: bold; margin: 0; color: {C["navy"]}; }}
+    .header-box p  {{ font-size: 16px; color: {C["navy2"]}; margin: 4px 0 0 0; font-family: 'Times New Roman', monospace; }}
+
+    .summary-box {{
+        background-color: {C["pale_blue"]};
+        border: 1.5px solid {C["navy"]};
         border-radius: 8px;
         padding: 14px;
         font-family: 'Times New Roman', monospace;
         font-size: 13px;
-        color: #0a1a3a;
+        color: {C["navy"]};
         line-height: 1.9;
-    }
-    .section-header {
-        background-color: #0a1a3a;
-        color: white;
+    }}
+    .section-header {{
+        background-color: {C["navy"]};
+        color: {C["white"]};
         padding: 7px 14px;
         border-radius: 6px;
         font-size: 12px;
@@ -45,27 +69,27 @@ st.markdown("""
         letter-spacing: 0.5px;
         text-transform: uppercase;
         margin-bottom: 8px;
-    }
-    .event-box {
-        background-color: white;
-        border: 1.5px solid #c8d8ea;
+    }}
+    .event-box {{
+        background-color: {C["pale_blue"]};
+        border: 1.5px solid {C["border"]};
         border-radius: 8px;
         padding: 14px;
         font-family: 'Times New Roman', monospace;
         font-size: 13px;
         line-height: 2.0;
-    }
-    .footer-bar {
-        background-color: #0a1a3a;
-        color: #7ab3e0;
+    }}
+    .footer-bar {{
+        background-color: {C["navy"]};
+        color: {C["navy3"]};
         padding: 8px 16px;
         border-radius: 6px;
         font-size: 11px;
         margin-top: 16px;
-    }
-    div.stButton > button {
-        background-color: #0a1a3a;
-        color: #fcd4eb;
+    }}
+    div.stButton > button {{
+        background-color: {C["navy"]};
+        color: {C["hover_pink"]};
         font-weight: bold;
         font-size: 15px;
         font-family: 'Times New Roman', monospace;
@@ -73,18 +97,59 @@ st.markdown("""
         border: none;
         padding: 10px;
         border-radius: 6px;
-    }
-    div.stButton > button:hover {
-        background-color: #fcd4eb;
-        color: #0a1a3a;
-    }
+    }}
+    div.stButton > button:hover {{
+        background-color: {C["pale_blue"]};
+        color: {C["navy"]};
+    }}
+
+    div.stDownloadButton > button {{
+        background-color: {C["navy"]};
+        color: {C["hover_pink"]};
+        font-weight: bold;
+        font-size: 15px;
+        font-family: 'Times New Roman', monospace;
+        width: 100%;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+    }}
+    div.stDownloadButton > button:hover {{
+        background-color: {C["hover_pink"]};
+        color: {C["navy"]};
+    }}
+
+
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
+st.markdown(f"""
 <div class="header-box">
-    <h1>🛰🛰🛰🛰 MMS Plasma Jet Trajectory Viewer</h1>
+    <h1>String-of-Pearls Measurements of Supersonic Plasma Jets Using Magnetospheric MultiScale Satellites</h1>
     <p>Laboratory for Solar-Magnetosphere-Ionosphere Research · Embry-Riddle Aeronautical University</p>
+</div>
+""", unsafe_allow_html=True)
+
+# ── Attribution banner ───────────────────────────────────────────────────────
+st.markdown(f"""
+<div style="
+    background-color: {C["hover_pink"]};
+    color: {C["navy"]};
+    padding: 8px 20px;
+    border-radius: 6px;
+    text-align: center;
+    font-family: 'Times New Roman', serif;
+    font-size: 13px;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+">
+    By <strong>Amelia Köth</strong> &nbsp;·&nbsp;
+    <a href="https://ameliakoth.com" target="_blank" style="
+        color: {C["navy"]};
+        font-weight: bold;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    ">Learn more about her here →</a>
 </div>
 """, unsafe_allow_html=True)
 
@@ -111,12 +176,12 @@ with right_col:
 
     st.markdown("---")
     st.markdown('<div class="section-header">Event Info</div>', unsafe_allow_html=True)
-    st.markdown("""
+    st.markdown(f"""
     <div class="event-box">
-        <b style="color:#c0392b;">Date:</b> 2025-02-27<br>
-        <b style="color:#c0392b;">Pass:</b> 05:19:50 – 05:21:49 UT<br>
-        <b style="color:#c0392b;">Region:</b> Magnetosheath<br>
-        <b style="color:#c0392b;">Method:</b> Min. Variance Analysis
+        <b style="color:{C["accent"]};">Date:</b> 2025-02-27<br>
+        <b style="color:{C["accent"]};">Pass:</b> 05:19:50 – 05:21:49 UT<br>
+        <b style="color:{C["accent"]};">Region:</b> Magnetosheath<br>
+        <b style="color:{C["accent"]};">Method:</b> Min. Variance Analysis
     </div>
     """, unsafe_allow_html=True)
 
@@ -165,7 +230,7 @@ if run:
     fig.add_trace(go.Scatter3d(
         x=X, y=Y, z=Z,
         mode='lines',
-        line=dict(color='blue', width=4),
+        line=dict(color=C["traj"], width=4),
         name='Trajectory',
         hovertemplate='X: %{x:.4f} RE<br>Y: %{y:.4f} RE<br>Z: %{z:.4f} RE<extra></extra>'
     ))
@@ -180,13 +245,13 @@ if run:
             y=[Y[i], Y[i] + normals[i,1]*scale],
             z=[Z[i], Z[i] + normals[i,2]*scale],
             mode='lines',
-            line=dict(color='black', width=1.5),
+            line=dict(color=C["navy"], width=1.5),
             name='Magnetic Field',
             showlegend=(i == 0),
             hoverinfo='skip'
         ))
 
-    # red jet core arrow
+    # jet core arrow
     nj = normals[jet_idx]
     sc = arrow_scale[jet_idx]
     fig.add_trace(go.Scatter3d(
@@ -194,16 +259,16 @@ if run:
         y=[yj, yj + nj[1]*sc],
         z=[zj, zj + nj[2]*sc],
         mode='lines',
-        line=dict(color='red', width=3),
+        line=dict(color=C["dot"], width=3),
         name='Jet Core',
         hoverinfo='skip'
     ))
 
-    # red jet core dot
+    # jet core dot
     fig.add_trace(go.Scatter3d(
         x=[xj], y=[yj], z=[zj],
         mode='markers',
-        marker=dict(size=4, color='red'),
+        marker=dict(size=4, color=C["dot"]),
         name='Jet Core Position',
         hovertemplate=f'Jet Core<br>X:{xj:.4f} Y:{yj:.4f} Z:{zj:.4f}<extra></extra>'
     ))
@@ -211,41 +276,41 @@ if run:
     # 7. STYLE
     fig.update_layout(
         height=600,
-        paper_bgcolor='white',
-        plot_bgcolor='white',
+        paper_bgcolor=C["cream"],
+        plot_bgcolor=C["cream"],
         showlegend=True,
         legend=dict(
             x=0.01, y=0.99,
-            bgcolor='rgba(255,255,255,0.9)',
-            bordercolor='#cccccc',
+            bgcolor=C["cream"],
+            bordercolor=C["navy2"],
             borderwidth=1,
-            font=dict(size=11)
+            font=dict(size=11, color=C["navy"])
         ),
         margin=dict(l=0, r=0, t=10, b=0),
         scene=dict(
-            bgcolor='white',
+            bgcolor=C["cream"],
             xaxis=dict(
                 title=dict(text='X [RE]'),
-                backgroundcolor='white',
-                gridcolor='#dddddd',
+                backgroundcolor=C["white"],
+                gridcolor=C["grid"],
                 showbackground=True,
-                tickfont=dict(size=10, color='gray'),
+                tickfont=dict(size=10, color=C["navy"]),
                 range=[10.455, 10.515]
             ),
             yaxis=dict(
                 title=dict(text='Y [RE]'),
-                backgroundcolor='white',
-                gridcolor='#dddddd',
+                backgroundcolor=C["white"],
+                gridcolor=C["grid"],
                 showbackground=True,
-                tickfont=dict(size=10, color='gray'),
+                tickfont=dict(size=10, color=C["navy"]),
                 range=[0.7595, 0.7690]
             ),
             zaxis=dict(
                 title=dict(text='Z [RE]'),
-                backgroundcolor='white',
-                gridcolor='#dddddd',
+                backgroundcolor=C["white"],
+                gridcolor=C["grid"],
                 showbackground=True,
-                tickfont=dict(size=10, color='gray'),
+                tickfont=dict(size=10, color=C["navy"]),
                 range=[2.3170, 2.3310]
             ),
             camera=dict(eye=dict(x=1.8, y=1.2, z=0.8))
@@ -258,18 +323,18 @@ if run:
     # 8. SUMMARY
     summary_html = f"""
 <div class="summary-box">
-    <b style="color:#c0392b;">Time:</b> {timestamps[jet_idx]}<br>
-    <hr style="border:1px dashed #b0cce8; margin:6px 0;">
-    <b style="color:#c0392b;">X:</b> {xj:.4f} RE<br>
-    <b style="color:#c0392b;">Y:</b> {yj:.4f} RE<br>
-    <b style="color:#c0392b;">Z:</b> {zj:.4f} RE<br>
-    <hr style="border:1px dashed #b0cce8; margin:6px 0;">
-    <b style="color:#c0392b;">|B|:</b> {B_mag_jet:.4f} nT<br>
-    <b style="color:#c0392b;">Nx:</b> {normals[jet_idx,0]:.4f}<br>
-    <b style="color:#c0392b;">Ny:</b> {normals[jet_idx,1]:.4f}<br>
-    <b style="color:#c0392b;">Nz:</b> {normals[jet_idx,2]:.4f}<br>
-    <hr style="border:1px dashed #b0cce8; margin:6px 0;">
-    <b style="color:#c0392b;">Index:</b> {jet_idx}
+    <b style="color:{C["accent"]};">Time:</b> {timestamps[jet_idx]}<br>
+    <hr style="border:1px dashed {C["navy3"]}; margin:6px 0;">
+    <b style="color:{C["accent"]};">X:</b> {xj:.4f} RE<br>
+    <b style="color:{C["accent"]};">Y:</b> {yj:.4f} RE<br>
+    <b style="color:{C["accent"]};">Z:</b> {zj:.4f} RE<br>
+    <hr style="border:1px dashed {C["navy3"]}; margin:6px 0;">
+    <b style="color:{C["accent"]};">|B|:</b> {B_mag_jet:.4f} nT<br>
+    <b style="color:{C["accent"]};">Nx:</b> {normals[jet_idx,0]:.4f}<br>
+    <b style="color:{C["accent"]};">Ny:</b> {normals[jet_idx,1]:.4f}<br>
+    <b style="color:{C["accent"]};">Nz:</b> {normals[jet_idx,2]:.4f}<br>
+    <hr style="border:1px dashed {C["navy3"]}; margin:6px 0;">
+    <b style="color:{C["accent"]};">Index:</b> {jet_idx}
 </div>
 """
     summary_placeholder.markdown(summary_html, unsafe_allow_html=True)
@@ -277,36 +342,45 @@ if run:
 # POSTER SECTION
 st.markdown("---")
 st.markdown('<div class="section-header">Research Poster</div>', unsafe_allow_html=True)
-st.markdown("""
+st.markdown(f"""
 <div style="
-    background-color: white;
-    border: 1.5px solid #c8d8ea;
+    background-color: {C["cream"]};
+    border: 1.5px solid {C["border"]};
     border-radius: 8px;
     padding: 16px;
     text-align: center;
 ">
     <p style="
-        font-size: 13px;
-        color: #0a1a3a;
+        font-size: 26px;
+        color: {C["navy"]};
         font-weight: bold;
         margin-bottom: 10px;
         font-family: 'Times New Roman';
     ">
         String-of-Pearls Measurements of Supersonic Plasma Jets Using Magnetospheric MultiScale Satellites<br>
-        <span style="font-weight:normal; color:#555;">Amelia Köth, Dr. Yu-Lun Liou, and Dr. Katariina Nykyri</span><br>
-        <span style="font-weight:normal; color:#555;">Laboratory for Solar-Magnetosphere-Ionosphere Research · ERAU</span>
+        <span style="font-weight:normal; color:{C["navy2"]};">Amelia Köth, Dr. Yu-Lun Liou, and Dr. Katariina Nykyri</span><br>
+        <span style="font-weight:normal; color:{C["navy3"]};">Laboratory for Solar-Magnetosphere-Ionosphere Research · ERAU</span>
     </p>
 </div>
 """, unsafe_allow_html=True)
 
 POSTER_PATH = os.path.join(MATLAB_DIR, "poster.png")
+# Download button for poster
 if os.path.exists(POSTER_PATH):
+    with open(POSTER_PATH, "rb") as f:
+        poster_bytes = f.read()
+    st.download_button(
+        label="⬇  Download Poster",
+        data=poster_bytes,
+        file_name="MMS_Plasma_Jet_Poster.png",
+        mime="image/png"
+        )
     poster_img = Image.open(POSTER_PATH)
     st.image(poster_img, use_container_width=True)
 else:
     st.warning("poster.png not found — upload it to your GitHub repository")
 
-st.markdown("""
+st.markdown(f"""
 <div class="footer-bar">
     MMS · Northward IMF Event · Feb 27 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Amelia Köth · ERAU LASMIR
 </div>
