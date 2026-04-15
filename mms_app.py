@@ -115,7 +115,7 @@ st.markdown(f"""
         border-radius: 6px;
     }}
     div.stDownloadButton > button:hover {{
-        background-color: {C["hover_pink"]};
+        background-color: {C["pale_blue"]};
         color: {C["navy"]};
     }}
 
