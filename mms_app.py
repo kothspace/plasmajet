@@ -126,6 +126,7 @@ st.markdown(f"""
 st.markdown(f"""
 <div class="header-box">
     <h1>String-of-Pearls Measurements of Supersonic Plasma Jets Using Magnetospheric MultiScale Satellites</h1>
+    <p>🛰🛰🛰🛰</p>
     <p>Laboratory for Solar-Magnetosphere-Ionosphere Research · Embry-Riddle Aeronautical University</p>
 </div>
 """, unsafe_allow_html=True)
@@ -290,7 +291,10 @@ if run:
         scene=dict(
             bgcolor=C["cream"],
             xaxis=dict(
-                title=dict(text='X [RE]'),
+                title=dict(
+                  text='X [RE]',
+                  font=dict(size=14, color=C["navy"])  # ← change color here
+                ),
                 backgroundcolor=C["white"],
                 gridcolor=C["grid"],
                 showbackground=True,
@@ -298,7 +302,10 @@ if run:
                 range=[10.455, 10.515]
             ),
             yaxis=dict(
-                title=dict(text='Y [RE]'),
+                title=dict(
+                    text='Y [RE]',
+                    font=dict(size=14, color=C["navy"])  # ← change color here
+                ),
                 backgroundcolor=C["white"],
                 gridcolor=C["grid"],
                 showbackground=True,
@@ -306,7 +313,10 @@ if run:
                 range=[0.7595, 0.7690]
             ),
             zaxis=dict(
-                title=dict(text='Z [RE]'),
+                title=dict(
+                    text='Z [RE]',
+                    font=dict(size=14, color=C["navy"])  # ← change color here
+                ),
                 backgroundcolor=C["white"],
                 gridcolor=C["grid"],
                 showbackground=True,
